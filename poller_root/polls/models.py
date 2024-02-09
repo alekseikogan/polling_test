@@ -38,14 +38,15 @@ class Question(models.Model):
         verbose_name = 'Вопрос'
         verbose_name_plural = 'Вопросы'
 
+    # https://pyformat.info/
     def __str__(self):
         return "%s%s" % ('------'[:self.path.count('/', 2)-1], self.question_text)
 
     def save(self):
         if self.previous_question:
-            self.path = '%s%s/' % (self.previous_question.path, self.code)
+            self.path = f'{self.previous_question.path}{self.code}/'
         else:
-            self.path = '/%s /' % self.code
+            self.path = f'/{self.code}/'
             super(type(self), self).save()
         for a in Question.objects.filter(previous_question=self.id):
             a.save()
