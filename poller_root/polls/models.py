@@ -16,6 +16,7 @@ class Survey(models.Model):
         return self.name
 
 
+# https://habr.com/ru/articles/5959/
 class Question(models.Model):
     question_text = models.CharField(max_length=250, verbose_name='Вопрос')
     pub_date = models.DateTimeField(verbose_name='Дата публикации')
@@ -23,6 +24,7 @@ class Question(models.Model):
         Survey,
         on_delete=models.CASCADE,
         related_name='questions')
+    code = models.CharField(max_length=15, unique=True, null=False, blank=False)
     previous_question = models.ForeignKey(
         'self',
         verbose_name='Прошлый вопрос',
@@ -30,13 +32,23 @@ class Question(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True)
+    path = models.CharField(max_length=255, null=False, editable=False)
 
     class Meta:
         verbose_name = 'Вопрос'
         verbose_name_plural = 'Вопросы'
 
     def __str__(self):
-        return self.question_text
+        return "%s%s" % ('------'[:self.path.count('/', 2)-1], self.question_text)
+
+    def save(self):
+        if self.previous_question:
+            self.path = '%s%s/' % (self.previous_question.path, self.code)
+        else:
+            self.path = '/%s /' % self.code
+            super(type(self), self).save()
+        for a in Question.objects.filter(previous_question=self.id):
+            a.save()
 
 
 class Choice(models.Model):

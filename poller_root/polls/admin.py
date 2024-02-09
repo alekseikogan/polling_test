@@ -20,7 +20,7 @@ class QuestionAdmin(admin.ModelAdmin):
         ),
         (
             'Дата публикации',
-            {'fields': ['pub_date'], 'classes': ['wide']} # можно wide
+            {'fields': ['pub_date'], 'classes': ['wide']} # можно collapse
         ),
     ]
     inlines = [ChoiceInLine]

@@ -24,6 +24,8 @@ def index(request):
 def survey(request, survey_id):
     survey = Survey.objects.get(pk=survey_id)
     questions = Question.objects.filter(survey_id=survey_id)
+    for i in questions:
+        print(f'Вопрос:{str(i)}')
     return render(
         request,
         'poller/survey.html',
