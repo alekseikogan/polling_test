@@ -26,6 +26,7 @@ class Question(models.Model):
     previous_question = models.ForeignKey(
         'self',
         verbose_name='Прошлый вопрос',
+        related_name='children',
         on_delete=models.SET_NULL,
         blank=True,
         null=True)
