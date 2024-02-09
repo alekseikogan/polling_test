@@ -5,8 +5,8 @@ register = template.Library()
 
 @register.filter
 def ru_plural(value):
+    '''Определяет склонение слова ГОЛОС в зависимости от количества'''
     value = int(value)
-    
 
     if value % 10 == 1 and value % 100 != 11:
         variant = 'голос'
